@@ -1,0 +1,36 @@
+@TodoApi_HostAddress = http://localhost:5222
+
+GET {{TodoApi_HostAddress}}/api/todoItems/
+Accept: application/json
+
+###
+POST {{TodoApi_HostAddress}}/api/brand/
+Content-Type: application/json
+
+{
+    "name":"beer 1"
+}
+
+###
+GET {{TodoApi_HostAddress}}/api/beer/
+###
+POST {{TodoApi_HostAddress}}/api/beer/
+Content-Type: application/json
+
+{
+    "name":"beer repository",
+    "brandID" : 1,
+    "alcohol":40
+}
+###
+PUT {{TodoApi_HostAddress}}/api/beer/8
+Content-Type: application/json
+
+{
+    "name":"beeredit",
+    "brandID" : 1,
+    "alcohol":11.0
+}
+###
+DELETE {{TodoApi_HostAddress}}/api/beer/8
+Content-Type: application/json
