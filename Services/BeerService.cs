@@ -1,4 +1,5 @@
 using System;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TodoApi.DTO;
 using TodoApi.Extensions;
@@ -12,16 +13,24 @@ public class BeerService : IBeerService
 
     
     private readonly IRepository<Beer> _beerRepository;
-    public BeerService(IRepository<Beer> beerRepository)
+    private readonly IMapper _mapper;
+    public BeerService(
+        IRepository<Beer> beerRepository,
+        IMapper mapper
+    )
     {
         _beerRepository = beerRepository;
+        _mapper = mapper;
     }
     public async Task<BeerDTO> Add(BeerInsertDTO beerInsertDTO)
     {
-        var beer = beerInsertDTO.ToModel();
+        var beer = beerInsertDTO.ToModel();  //with extensions
+        // var beer = _mapper.Map<Beer>(beerInsertDTO); //with automapper
 
         await _beerRepository.Add(beer);
         await _beerRepository.Save();
+
+        // var beerDTO = _mapper.Map<BeerDTO>(beer)  //with automapper;
 
         return beer.ToDTO();
     }
@@ -36,6 +45,7 @@ public class BeerService : IBeerService
             _beerRepository.Delete(beer);
             await _beerRepository.Save();
 
+            
             return beer.ToDTO();
         }
 

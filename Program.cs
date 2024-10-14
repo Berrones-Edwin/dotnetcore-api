@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using TodoApi.AutoMappers;
 using TodoApi.DTO;
 using TodoApi.Models;
 using TodoApi.Repository;
@@ -42,6 +43,9 @@ builder.Services.AddSqlite<Context>(connString);
 // Validators
 builder.Services.AddScoped<IValidator<BeerInsertDTO>,BeerInsertValidation>();
 builder.Services.AddScoped<IValidator<BeerUpdateDTO>,BeerUpdateValidation>();
+
+// AutoMAppers
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
