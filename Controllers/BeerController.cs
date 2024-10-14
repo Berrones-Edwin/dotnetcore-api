@@ -51,6 +51,10 @@ namespace TodoApi.Controllers
                 return BadRequest(validationResult.Errors);
             }
 
+            if(!_beerService.Validate(beerInsertDTO)){
+                return BadRequest(_beerService.Errors);
+            }
+
             var beerDTO = await _beerService.Add(beerInsertDTO);
 
             return CreatedAtAction(nameof(GetById), new { id = beerDTO.Id }, beerDTO);
@@ -63,6 +67,10 @@ namespace TodoApi.Controllers
             if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
+            }
+
+            if(!_beerService.Validate(beerUpdateDTO)){
+                return BadRequest(_beerService.Errors);
             }
             var beer = await _beerService.Update(id, beerUpdateDTO);
 

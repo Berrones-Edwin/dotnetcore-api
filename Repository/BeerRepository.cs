@@ -37,4 +37,9 @@ public class BeerRepository : IRepository<Beer>
         _context.Beers.Attach(entity);
         _context.Beers.Entry(entity).State = EntityState.Modified;
     }
+
+    public IEnumerable<Beer> Search(Func<Beer,bool> filter) 
+    {
+        return _context.Beers.Where(filter).ToList();
+    }
 }

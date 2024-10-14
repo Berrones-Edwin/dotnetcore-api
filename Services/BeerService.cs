@@ -11,7 +11,8 @@ namespace TodoApi.Services;
 public class BeerService : IBeerService
 {
 
-    
+
+    public List<string> Errors { get; }
     private readonly IRepository<Beer> _beerRepository;
     private readonly IMapper _mapper;
     public BeerService(
@@ -21,7 +22,11 @@ public class BeerService : IBeerService
     {
         _beerRepository = beerRepository;
         _mapper = mapper;
+        Errors = new List<string>();
     }
+
+
+
     public async Task<BeerDTO> Add(BeerInsertDTO beerInsertDTO)
     {
         var beer = beerInsertDTO.ToModel();  //with extensions
@@ -30,7 +35,8 @@ public class BeerService : IBeerService
         await _beerRepository.Add(beer);
         await _beerRepository.Save();
 
-        // var beerDTO = _mapper.Map<BeerDTO>(beer)  //with automapper;
+        // var beerDTO = _mapper.Map<BeerDTO>(beer)  //with automapper
+
 
         return beer.ToDTO();
     }
@@ -45,7 +51,7 @@ public class BeerService : IBeerService
             _beerRepository.Delete(beer);
             await _beerRepository.Save();
 
-            
+
             return beer.ToDTO();
         }
 
@@ -86,5 +92,27 @@ public class BeerService : IBeerService
         }
 
         return null!;
+    }
+
+    public bool Validate(BeerInsertDTO beerInsertDTO)
+    {
+        if (_beerRepository.Search(b => b.Name == beerInsertDTO.Name).Count() > 0)
+        {
+            Errors.Add("You cannot add a beer with the same name");
+            return false;
+        }
+        return true;
+    }
+
+    public bool Validate(BeerUpdateDTO beerUpdateDTO)
+    {
+
+        if (_beerRepository.Search(b => b.Name == beerUpdateDTO.Name
+           && beerUpdateDTO.Id != b.BeerId).Count() > 0)
+        {
+            Errors.Add("You cannot add a beer with the same name");
+            return false;
+        }
+        return true;
     }
 }

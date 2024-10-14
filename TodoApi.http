@@ -27,7 +27,7 @@ PUT {{TodoApi_HostAddress}}/api/beer/8
 Content-Type: application/json
 
 {
-    "name":"beeredit",
+    "name":"beer 5-edit",
     "brandID" : 1,
     "alcohol":11.0
 }
